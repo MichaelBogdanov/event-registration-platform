@@ -26,10 +26,12 @@ def login_view(request):
 def register_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(data=request.POST)
+        print(form.errors)
+        print(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('/') #profile
+            return redirect('/profile/')
     else:
         form = CustomUserCreationForm()
 
@@ -38,3 +40,10 @@ def register_view(request):
     }
 
     return render(request, 'registration/register.html', data)
+
+def logout_view(request):
+    logout(request)
+    return redirect('/')
+
+def profile_view(request):
+    return index(request) # Placeholder for profile view
