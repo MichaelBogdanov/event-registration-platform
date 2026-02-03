@@ -28,7 +28,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     patronymic = models.CharField('Отчество', max_length=200)
     phone = models.CharField('Номер телефона', unique=True)
     email = models.EmailField('Электронная почта', unique=True)
-    password = models.CharField('Пароль', max_length=88)
+    photo = models.ImageField('Фотография', upload_to="users/", blank=True, null=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
