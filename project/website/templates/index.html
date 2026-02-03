@@ -2,5 +2,5 @@
 {% load static %}
 
 {% block content %}
-<h1>Приветствую, {% if user.is_authenticated %}{{ user.email }}{% else %}гость{% endif %}</h1>
+<h1>Приветствую, {% if user.is_authenticated %}{{ user.surname }} {{ user.name }}{% else %}гость{% endif %}</h1>
 {% endblock %}

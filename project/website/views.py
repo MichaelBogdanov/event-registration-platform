@@ -3,6 +3,15 @@ from .forms import *
 from django.contrib.auth import login, logout
 
 
+
+def login_required(view):
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return view(request, *args, **kwargs)
+        else:
+            return redirect('/login/')
+    return wrapper
+
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -41,9 +50,14 @@ def register_view(request):
 
     return render(request, 'registration/register.html', data)
 
+@login_required
 def logout_view(request):
     logout(request)
     return redirect('/')
 
+@login_required
 def profile_view(request):
-    return index(request) # Placeholder for profile view
+    data = {
+
+    }
+    return render(request, "profile.html", data)
