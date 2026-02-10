@@ -18,8 +18,8 @@
 
 
         <div class="photo-actions">
-            <input id="photoInput" type="file" name="photo" accept="image/*" hidden>
             <label for="photoInput" class="btn btn-primary file-btn">
+            <input id="photoInput" type="file" name="photo" accept="image/*" hidden>
             Изменить фото
             </label>
             {% if user_obj.photo %}
@@ -63,14 +63,17 @@
     const saveBtn = document.getElementById('saveBtn');
     const cancelBtn = document.getElementById('cancelBtn');
     const photoInput = document.getElementById('photoInput');
+    const photoEditButton = document.getElementsByClassName('file-btn');
+    const photoDeleteButton = document.getElementsByClassName('file-btn-secondary');
     const avatarPreview = document.getElementById('avatarPreview');
 
     // Все редактируемые поля
-    const inputs = Array.from(form.querySelectorAll('input, textarea, select'))
-        .filter(i => i.name && i.type !== 'hidden' && i.type !== 'file');
+    const inputs = Array.from(form.querySelectorAll('input, textarea, select, button'))
+        .filter(i => i.name && i.type !== 'hidden');
 
     function setDisabled(state) {
         inputs.forEach(i => i.disabled = state);
+        photoDeleteButton[0].classList.toggle('disabled');
     }
 
     // По умолчанию форма заблокирована
