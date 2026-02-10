@@ -73,7 +73,12 @@
 
     function setDisabled(state) {
         inputs.forEach(i => i.disabled = state);
-        photoDeleteButton[0].classList.toggle('disabled');
+        try {
+            photoDeleteButton[0].classList.toggle('disabled');
+        }
+        catch {
+            
+        }
     }
 
     // По умолчанию форма заблокирована
