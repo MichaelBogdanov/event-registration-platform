@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 
 
+
 # Create your models here.
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -44,5 +45,62 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     
 
     class Meta:
-            verbose_name = 'пользователя'
-            verbose_name_plural = 'Пользователи'
+        verbose_name = 'пользователя'
+        verbose_name_plural = 'Пользователи'
+
+
+
+class WeekDay(models.Model):
+    name = models.CharField('Название', max_length=255)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'день недели'
+        verbose_name_plural = 'Дни недели'
+
+class Event(models.Model):
+    name = models.CharField('Название', max_length=255)
+    description = models.TextField('Описание')
+    capacity = models.IntegerField('Максимальное кол-во участников')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'событие'
+        verbose_name_plural = 'События'
+
+
+class Schedule(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, verbose_name='Событие')
+    weekday = models.ForeignKey(WeekDay, on_delete=models.PROTECT, verbose_name='День недели')
+    start_time = models.TimeField('Время начала')
+    finish_time = models.TimeField('Время конца')
+    place = models.CharField('Место проведения')
+
+    def __str__(self):
+        return f'{self.event}:      {self.weekday} с {self.start_time} до {self.finish_time}'
+
+    class Meta:
+        verbose_name = 'расписание'
+        verbose_name_plural = 'Расписания'
+
+
+
+class Club(Event):
+    supervisor = models.ForeignKey(CustomUser, on_delete=models.PROTECT, verbose_name='Руководитель')
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = 'кружок'
+        verbose_name_plural = 'Кружки'
+
+
+
+
+
+models_list = [CustomUser, WeekDay, Event, Schedule, Club]
