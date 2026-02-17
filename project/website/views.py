@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import *
 from django.contrib.auth import login, logout
 from django.contrib import messages
+from .models import *
 
 
 
@@ -79,3 +80,21 @@ def profile_view(request):
     
 
     return render(request, "profile.html", {'form': form, 'user_obj': user})
+
+
+@login_required
+def events_view(request):
+    data = {
+        'events': Event.objects.all(),
+        'shedule': Schedule.objects.all()
+    }
+    return render(request, 'events.html', data)
+
+@login_required
+def clubs_view(request):
+    data = {
+        'clubs': Club.objects.all(),
+        'shedule': Schedule.objects.all()
+
+    }
+    return render(request, 'clubs.html', data)

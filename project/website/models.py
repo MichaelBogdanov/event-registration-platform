@@ -64,6 +64,7 @@ class Event(models.Model):
     name = models.CharField('Название', max_length=255)
     description = models.TextField('Описание')
     capacity = models.IntegerField('Максимальное кол-во участников')
+    logo = models.ImageField('Превью', upload_to='events/', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -101,6 +102,18 @@ class Club(Event):
 
 
 
+class EventMember(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, verbose_name='Событие')
+    user = models.ForeignKey(CustomUser, on_delete=models.PROTECT, verbose_name='Участник')
+
+    def __str__(self):
+        return f'{self.user} на {self.event}'
+    
+    class Meta:
+        verbose_name = 'участника'
+        verbose_name_plural = 'Участники'
 
 
-models_list = [CustomUser, WeekDay, Event, Schedule, Club]
+
+
+models_list = [CustomUser, WeekDay, Event, Schedule, Club, EventMember]

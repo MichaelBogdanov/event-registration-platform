@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load event_filters %}
+
+{% block content %}
+
+<section id="clubs">
+    {% for club in clubs %}
+    <article id='club-{{ club.id }}' class="club">
+        <img src="/media/{{ club.logo }}" alt="">
+        <h2>{{ club.name }}</h2>
+    </article>
+    <article id='club-{{ club.id }}-more-info'> 
+        <h2>{{ club.name }}</h2>
+        <p>{{ club.description }}</p>
+        <p>Участников: {{ club|get_members_count }} из {{ club.capacity }}</p>
+    </article>
+    {% endfor %}
+</section>
+
+{% endblock %}
+
