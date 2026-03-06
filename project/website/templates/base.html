@@ -22,12 +22,28 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.20/dist/sweetalert2.all.min.js"></script>
     <script>
     function showAlert(title, text, icon) {
-        Swal.fire({
+        const swalConfig = {
             title: title,
             text: text,
             icon: icon,
-            confirmButtonText: 'OK'
-        });
+            confirmButtonText: 'OK',
+            buttonsStyling: false,
+            customClass: {
+                container: 'swal2-container-custom',
+                popup: 'swal2-popup-custom',
+                title: 'swal2-title-custom',
+                content: 'swal2-content-custom',
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-muted'
+            },
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp animate__faster'
+            }
+        };
+        Swal.fire(swalConfig);
     }
     function showConfirmation(title, text, confirmCallback) {
         Swal.fire({
@@ -36,7 +52,16 @@
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Да',
-            cancelButtonText: 'Нет'
+            cancelButtonText: 'Нет',
+            buttonsStyling: false,
+            customClass: {
+                container: 'swal2-container-custom',
+                popup: 'swal2-popup-custom',
+                title: 'swal2-title-custom',
+                content: 'swal2-content-custom',
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-muted'
+            }
         }).then((result) => {
             if (result.isConfirmed) {
                 confirmCallback();
