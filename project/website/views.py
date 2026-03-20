@@ -106,6 +106,25 @@ def profile_view(request):
     return render(request, "profile.html", {'form': form, 'user_obj': user})
 
 @login_required
+def unsubscribe_view(request, id):
+    user = request.user
+    event = Event.objects.filter(id=id).first()
+    
+    if not event:
+        messages.error(request, 'Такого мероприятия не существует')
+    elif event in map(lambda x: x.event, EventMember.objects.filter(user=user)):
+        subscribe = EventMember.objects.get(user=user, event=event)
+        messages.success(request, f'Вы успешно отменили запись на {subscribe.event.name}')
+        subscribe.delete()
+    else:
+        messages.error(request, 'Вы не являетесь участником данного мероприятия')
+    # return redirect(request.META.get('HTTP_REFERER'))
+    try:
+        return redirect(request.GET.get('next'))
+    except TypeError:
+        return redirect('/profile/')
+
+@login_required
 def events_view(request):
     data = {
         'events': Event.objects.filter(club__isnull=True),
@@ -156,3 +175,10 @@ def clubs_view(request):
     return render(request, 'clubs.html', data)
 
 
+'''
+При регистрации сделать выпадающий список выбора роли;
+Для организаторов сделать отдельную страницу с добавлением мероприятия или кружка (без доступа напрямую в админ-панель);
+Добавить связь родителя и ребёнка через систему заявок;
+Сделать систему оповещений;
+Чаты по мероприятиям.
+'''

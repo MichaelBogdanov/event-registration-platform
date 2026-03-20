@@ -10,4 +10,5 @@ urlpatterns = [
     path('password_change/', password_change_view),
     path('events/', events_view),
     path('clubs/', clubs_view),
+    path('unsubscribe/<int:id>/', unsubscribe_view),
 ]
