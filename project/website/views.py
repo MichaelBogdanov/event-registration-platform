@@ -174,9 +174,20 @@ def clubs_view(request):
             messages.error(request, 'Не удалось записаться в кружок')
     return render(request, 'clubs.html', data)
 
+@login_required
+def create_view(request):
+    user = request.user
+    if user.role != 'organizer':
+        messages.error(request, 'Вы не являетесь организатором')
+        return redirect('/profile/')
+    return render(request, 'create.html', {'form': ...})
+    
+
+
 
 '''
 Для организаторов сделать отдельную страницу с добавлением мероприятия или кружка (без доступа напрямую в админ-панель);
+Форму сделать для добавления мероприятий
 Добавить связь родителя и ребёнка через систему заявок;
 Сделать систему оповещений;
 Чаты по мероприятиям.
