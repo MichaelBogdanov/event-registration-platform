@@ -33,7 +33,7 @@
             {% endif %}
         {% else %}
         <p>Вы являетесь участником!</p>
-        <a href="/profile/">Отменить запись в профиле</a>
+        <a href="/unsubscribe/{{ club.id }}/?next={{ request.path }}">Отменить запись</a>
         {% endif %}
     </article>
     {% endfor %}

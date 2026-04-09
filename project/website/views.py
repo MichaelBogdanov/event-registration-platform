@@ -16,7 +16,10 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            messages.success(request, 'Вы успешно вошли в аккаунт')
             return redirect('/')
+        else:
+            messages.error(request, 'Пожалуйста, исправьте ошибки в форме входа')
     else:
         form = CustomAuthenticationForm()
     data = {
@@ -32,7 +35,10 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            messages.success(request, 'Вы успешно зарегистрировались и вошли в аккаунт')
             return redirect('/profile/')
+        else:
+            messages.error(request, 'Пожалуйста, исправьте ошибки в форме регистрации')
     else:
         form = CustomUserCreationForm()
     data = {
@@ -45,12 +51,14 @@ def login_required(view):
         if request.user.is_authenticated:
             return view(request, *args, **kwargs)
         else:
+            messages.error(request, 'Пожалуйста, войдите в аккаунт, чтобы получить доступ к этой странице')
             return redirect('/login/')
     return wrapper
 
 @login_required
 def logout_view(request):
     logout(request)
+    messages.success(request, 'Вы успешно вышли из аккаунта')
     return redirect('/')
 
 @login_required
@@ -74,7 +82,7 @@ def password_change_view(request):
                 messages.success(request, 'Пароль успешно изменён')
                 return redirect('/login/')
             except:
-                messages.error(request, 'Новый пароль слишком простой или распостранённый')
+                messages.error(request, 'Новый пароль слишком простой или распространённый')
     return render(request, 'registration/password_change.html')
 
 @login_required
@@ -98,9 +106,28 @@ def profile_view(request):
     return render(request, "profile.html", {'form': form, 'user_obj': user})
 
 @login_required
+def unsubscribe_view(request, id):
+    user = request.user
+    event = Event.objects.filter(id=id).first()
+    
+    if not event:
+        messages.error(request, 'Такого мероприятия не существует')
+    elif event in map(lambda x: x.event, EventMember.objects.filter(user=user)):
+        subscribe = EventMember.objects.get(user=user, event=event)
+        messages.success(request, f'Вы успешно отменили запись на {subscribe.event.name}')
+        subscribe.delete()
+    else:
+        messages.error(request, 'Вы не являетесь участником данного мероприятия')
+    # return redirect(request.META.get('HTTP_REFERER'))
+    try:
+        return redirect(request.GET.get('next'))
+    except TypeError:
+        return redirect('/profile/')
+
+@login_required
 def events_view(request):
     data = {
-        'events': [event for event in Event.objects.all() if event.id not in [club.id for club in Club.objects.all()]],
+        'events': Event.objects.filter(club__isnull=True),
         'shedule': Schedule.objects.all()
     }
     if request.method == 'POST':
@@ -115,11 +142,11 @@ def events_view(request):
                     messages.success(request, f'Вы успешно записались на мероприятие «{event.name}»')
                     return redirect('/profile/')
                 else:
-                    return HttpResponseForbidden('К сожалению, в момент отправки запроса, свободных мест на меропрятие уже не осталось')
+                    messages.error(request, 'К сожалению, в момент отправки запроса, свободных мест на мероприятие уже не осталось')
             else:
-                return HttpResponseForbidden('Вы уже являетесь участником данного мероприятия')
+                messages.error(request, 'Вы уже являетесь участником данного мероприятия')
         except:
-            return HttpResponseForbidden('Не удалось записаться на мероприятие')
+            messages.error(request, 'Не удалось записаться на мероприятие')
     return render(request, 'events.html', data)
 
 @login_required
@@ -140,11 +167,28 @@ def clubs_view(request):
                     messages.success(request, f'Вы успешно записались в кружок «{club.name}»')
                     return redirect('/profile/')
                 else:
-                    return HttpResponseForbidden('К сожалению, в момент отправки запроса, в кружке уже было максимальное число участников')
+                    messages.error(request, 'К сожалению, в момент отправки запроса, в кружке уже было максимальное число участников')
             else:
-                return HttpResponseForbidden('Вы уже являетесь участником данного кружка')
+                messages.error(request, 'Вы уже являетесь участником данного кружка')
         except:
-            return HttpResponseForbidden('Не удалось записаться в кружок')
+            messages.error(request, 'Не удалось записаться в кружок')
     return render(request, 'clubs.html', data)
 
+@login_required
+def create_view(request):
+    user = request.user
+    if user.role != 'organizer':
+        messages.error(request, 'Вы не являетесь организатором')
+        return redirect('/profile/')
+    return render(request, 'create.html', {'form': ...})
+    
 
+
+
+'''
+Для организаторов сделать отдельную страницу с добавлением мероприятия или кружка (без доступа напрямую в админ-панель);
+Форму сделать для добавления мероприятий
+Добавить связь родителя и ребёнка через систему заявок;
+Сделать систему оповещений;
+Чаты по мероприятиям.
+'''
