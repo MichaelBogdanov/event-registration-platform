@@ -180,7 +180,20 @@ def create_view(request):
     if user.role != 'organizer':
         messages.error(request, 'Вы не являетесь организатором')
         return redirect('/profile/')
-    return render(request, 'create.html', {'form': ...})
+    form = EventCreationForm()
+    if request.method == 'POST':
+        form = EventCreationForm(data=request.POST)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.organizer = request.user
+            event.save()
+            messages.success(request, 'Мероприятие успешно добавлено')
+        else:
+            messages.error(request, 'Неверные данные мероприятия')
+    data = {
+        'form': form
+    }
+    return render(request, 'create.html', data)
     
 
 

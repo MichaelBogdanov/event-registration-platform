@@ -53,3 +53,15 @@ class ProfileForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'})
         }
+
+
+class EventCreationForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ('name', 'description', 'capacity', 'logo')
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Введите название мероприятия'}),
+            'description': forms.Textarea(attrs={'placeholder': 'Введите описание мероприятия'}),
+            'capacity': forms.NumberInput(attrs={'placeholder': 'Введите максимальное число участников', 'min': '0'}),
+            'logo': forms.ClearableFileInput(),
+        }

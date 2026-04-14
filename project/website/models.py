@@ -65,6 +65,7 @@ class Event(models.Model):
     description = models.TextField('Описание')
     capacity = models.IntegerField('Максимальное кол-во участников')
     logo = models.ImageField('Превью', upload_to='events/', blank=True, null=True)
+    organizer = models.ForeignKey(CustomUser, verbose_name='Организатор', on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name
