@@ -60,12 +60,13 @@ class WeekDay(models.Model):
         verbose_name = 'день недели'
         verbose_name_plural = 'Дни недели'
 
-class Event(models.Model):
+class BaseEvent(models.Model):
     name = models.CharField('Название', max_length=255)
     description = models.TextField('Описание')
     capacity = models.IntegerField('Максимальное кол-во участников')
     logo = models.ImageField('Превью', upload_to='events/', blank=True, null=True)
     organizer = models.ForeignKey(CustomUser, verbose_name='Организатор', on_delete=models.PROTECT)
+    created_at = models.DateTimeField('Дата и время создания', auto_now_add=True)
 
     def __str__(self):
         return self.name
@@ -73,6 +74,11 @@ class Event(models.Model):
     class Meta:
         verbose_name = 'событие'
         verbose_name_plural = 'События'
+        ordering = ["-created_at"]
+
+class Event(BaseEvent):
+    date = models.DateField('Дата проведения')
+    start_time = models.TimeField('Время начала')
 
 class Schedule(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, verbose_name='Событие')
@@ -89,7 +95,7 @@ class Schedule(models.Model):
         verbose_name = 'расписание'
         verbose_name_plural = 'Расписания'
 
-class Club(Event):
+class Club(BaseEvent):
     supervisor = models.ForeignKey(CustomUser, on_delete=models.PROTECT, verbose_name='Руководитель')
 
     def __str__(self):
