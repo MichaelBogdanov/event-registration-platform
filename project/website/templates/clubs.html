@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load event_filters %}
+
+{% block content %}
+{% if not clubs %}
+<h2 class="message">Сейчас, к сожалению, нет информации о кружках</h2>
+{% else %}
+<section id="clubs">
+    {% for club in clubs %}
+    <article data-fancybox href="#club-{{ club.id }}-more-info" id='club-{{ club.id }}' class="club">
+        {% if club.logo %}
+        <img src="/media/{{ club.logo }}" alt="">
+        {% endif %}
+        <h2>{{ club.name }}</h2>
+    </article>
+    <article id='club-{{ club.id }}-more-info' class="modal">
+        <button class="modal-close" data-fancybox-close>&times;</button>
+        <h2>{{ club.name }}</h2>
+        <h3>Руководитель: {{ club.supervisor }}</h3>
+        <p>{{ club.description }}</p>
+        <p>Участников: {{ club|get_members_count }} из {{ club.capacity }}</p>
+        {% if user not in club|get_members %}
+            {% if club|get_members_count < club.capacity %}
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="club-id" value="{{ club.id }}">
+                <button type="submit">Записаться</button>
+            </form>
+            {% else %}
+            <p>К сожалению, на данный момент, свободных мест нет</p>
+            {% endif %}
+        {% else %}
+        <p>Вы являетесь участником!</p>
+        <a href="/unsubscribe/{{ club.id }}/?next={{ request.path }}">Отменить запись</a>
+        {% endif %}
+    </article>
+    {% endfor %}
+</section>
+{% endif %}
+{% endblock %}
+

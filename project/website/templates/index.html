@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1>Академия юных талантов</h1>
+        <p>Ваш путь к успеху начинается здесь. Записывайтесь на лучшие кружки и мероприятия дополнительного образования в одном месте.</p>
+        <div class="hero-btns">
+            {% if not user.is_authenticated %}
+                <a href="/register/" class="btn btn-primary">Начать пользоваться</a>
+                <a href="/login/" class="btn btn-muted">Войти в аккаунт</a>
+            {% else %}
+                <a href="/events/" class="btn btn-primary">Смотреть мероприятия</a>
+                <a href="/clubs/" class="btn btn-secondary">Записаться в кружок</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="features-grid">
+    <article class="feature-card">
+        <div class="feature-icon">📅</div>
+        <h3>Мероприятия</h3>
+        <p>Конкурсы, олимпиады и мастер-классы. Будьте в курсе всех событий Академии.</p>
+    </article>
+    <article class="feature-card">
+        <div class="feature-icon">🎨</div>
+        <h3>Кружки</h3>
+        <p>Развивайте свои таланты в творческих и технических секциях под руководством опытных наставников.</p>
+    </article>
+    <article class="feature-card">
+        <div class="feature-icon">🔔</div>
+        <h3>Уведомления</h3>
+        <p>Получайте актуальную информацию о ваших заявках и новых событиях в режиме реального времени.</p>
+    </article>
+</section>
+
+<section class="cta-section">
+    <h2>Готовы проявить себя?</h2>
+    <p>Присоединяйтесь к сообществу талантливых учеников уже сегодня.</p>
+    {% if not user.is_authenticated %}
+        <a href="/register/" class="btn btn-white">Создать аккаунт</a>
+    {% else %}
+        <a href="/profile/" class="btn btn-white">Перейти в профиль</a>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% load static %}
+<header>
+    <section class="container nav-container">
+        <a href="/" class="logo-box">
+            <img src="{% static 'images/logo.png' %}" alt="АЮТ" class="logo-img">
+        </a>
+        <nav>
+            <ul>
+                <li><a href="/" {% if request.path == "/" %}class="active"{% endif %}><i class="fa-solid fa-house"></i> Главная</a></li>
+                {% if not user.is_authenticated %}
+                    <li><a href="/login/" {% if request.path == "/login/" %}class="active"{% endif %}><i class="fa-solid fa-arrow-right-to-bracket"></i> Вход</a></li>
+                    <li><a href="/register/" {% if request.path == "/register/" %}class="active"{% endif %}><i class="fa-solid fa-user-plus"></i> Регистрация</a></li>
+                {% else %}
+                    <li><a href="/events/" {% if request.path == "/events/" %}class="active"{% endif %}><i class="fa-solid fa-bullhorn"></i> Мероприятия</a></li>
+                    <li><a href="/clubs/" {% if request.path == "/clubs/" %}class="active"{% endif %}><i class="fa-solid fa-shapes"></i> Кружки</a></li>
+                    {% if user.role == 'organizer' %}
+                        <li><a href="/create/" {% if request.path == "/create/" %}class="active"{% endif %}><i class="fa-solid fa-calendar-plus"></i> Добавить</a></li>
+                    {% endif %}
+
+                    <li><a href="/profile/" {% if request.path == "/profile/" %}class="active"{% endif %}><i class="fa-solid fa-user"></i> Профиль</a></li>
+
+                    {% if user.is_superuser %}
+                        <li><a href="/admin/"><i class="fa-brands fa-redhat"></i> Админ-панель</a></li>
+                    {% endif %}
+
+                    <li><a href="/logout/" {% if request.path == "/logout/" %}class="active"{% endif %}><i class="fa-solid fa-arrow-right-from-bracket"></i> Выход</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </section>
+</header>

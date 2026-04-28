@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="auth-container">
+    <article class="auth-header">
+        <h1 style="font-size: 32px; margin-bottom: 8px;">Добро пожаловать</h1>
+        <p style="color: var(--text-muted);">Войдите в аккаунт</p>
+    </article>
+    
+    <nav class="auth-tabs">
+        <a href="/login/" class="auth-tab active">Вход</a>
+        <a href="/register/" class="auth-tab">Регистрация</a>
+    </nav>
+    
+    <section class="form-card">
+        <form method="post">
+            {% csrf_token %}
+            <article class="form-group">
+                <label for="id_username">Электронная почта:</label>
+                <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="254" placeholder="Введите вашу электронную почту" required="" id="id_username">
+            </article>
+            <article class="form-group">
+                <label for="id_password">Пароль:</label>
+                <input type="password" name="password" autocomplete="current-password" placeholder="Введите ваш пароль" required="" id="id_password">
+            </article>
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 8px;">Войти</button>
+        </form>
+    </section>
+</section>
+{% endblock %}
