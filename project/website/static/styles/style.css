@@ -928,7 +928,7 @@ transform: translateY(-2px);
 #events,
 #clubs {
   width: 100%;
-padding: 40px 0;
+  padding: 40px 0;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   justify-content: center;
@@ -999,7 +999,7 @@ position: sticky;
 .profile-right {
 display: grid;
   gap: 32px;
-  grid-template-rows: repeat(auto-fill, minmax(200px, auto));
+  grid-template-rows: repeat(auto, minmax(200px, auto));
 }
 
 .profile-section h2 {

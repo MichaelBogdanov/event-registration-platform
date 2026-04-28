@@ -31,8 +31,6 @@ def login_view(request):
 def register_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(data=request.POST)
-        print(form.errors)
-        print(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
@@ -190,12 +188,10 @@ def create_view(request):
             try:
                 schedule = Schedule()
                 schedule.event = event
-                print(schedule.event, end='\n\n---------------\n\n')
                 schedule.specific_date = request.POST['date']
                 schedule.start_time = request.POST['start_time']
                 schedule.finish_time = request.POST['finish_time'] if request.POST['finish_time'] else None
                 schedule.weekday = WeekDay.objects.get(id=dt.weekday(dt.strptime(schedule.specific_date, '%Y-%m-%d').date()))
-                print(schedule.weekday)
                 schedule.place = request.POST['place']
             except:
                 messages.error(request, 'Неверная дата или время события')

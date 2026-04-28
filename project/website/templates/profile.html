@@ -65,10 +65,10 @@
     <div class="profile-right">
         {% if user_obj.role == "organizer" %}
         <div class="profile-section">
-            <h2>Организуе</h2>
+            <h2>Созданные мероприятия</h2>
             <section id="events">
-                {% if user_obj|get_user_events %}
-                {% for event in user_obj|get_user_events %}
+                {% if user_obj|get_organized_events %}
+                {% for event in user_obj|get_organized_events %}
                 <article data-fancybox href="#event-{{ event.id }}-more-info" id='event-{{ event.id }}' class="event">
                     {% if event.logo %}
                     <img src="/media/{{ event.logo }}" alt="">
@@ -97,12 +97,15 @@
                 </article>
                 {% endfor %}
                 {% else %}
-                <p>У Вас пока нет мероприятий</p>
+                <p>Пока что не создал ни одного мероприятия</p>
                 {% endif %}
             </section>
+        </div>
+        <div class="profile-section">
+            <h2>Созданные кружки</h2>
             <section id="clubs">
-                {% if user_obj|get_user_clubs %}
-                {% for club in user_obj|get_user_clubs %}
+                {% if user_obj|get_organized_clubs %}
+                {% for club in user_obj|get_organized_clubs %}
                 <article data-fancybox href="#club-{{ club.id }}-more-info" id='club-{{ club.id }}' class="club">
                     {% if club.logo %}
                     <img src="/media/{{ club.logo }}" alt="">
@@ -132,7 +135,7 @@
                 </article>
                 {% endfor %}
                 {% else %}
-                <p>Вы пока не записаны в кружки</p>
+                <p>Пока что не создал ни одного кружка</p>
                 {% endif %}
             </section>
         </div>
@@ -170,7 +173,7 @@
                 </article>
                 {% endfor %}
                 {% else %}
-                <p>У Вас пока нет мероприятий</p>
+                <p>Пока нет мероприятий</p>
                 {% endif %}
             </section>
         </div>
@@ -208,7 +211,7 @@
                 </article>
                 {% endfor %}
                 {% else %}
-                <p>Вы пока не записаны в кружки</p>
+                <p>Пока нет кружков</p>
                 {% endif %}
             </section>
         </div>
